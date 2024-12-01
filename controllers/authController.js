@@ -1,8 +1,9 @@
 // controllers/authController.js
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const User = require('../models/User');  // Import User model (no need to import mongoose)
+const User = require('../models/User');
 
+// Register a new user
 exports.registerUser = async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -21,6 +22,18 @@ exports.registerUser = async (req, res) => {
     }
 };
 
+// Get the profile of the logged-in user
+exports.getProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password'); // Exclude password
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching profile', error: error.message });
+    }
+};
+
+// Login user and generate JWT
 exports.loginUser = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
@@ -42,6 +55,7 @@ exports.loginUser = async (req, res) => {
     }
 };
 
+// Logout the user
 exports.logoutUser = (req, res) => {
     res.clearCookie('token');
     res.status(200).json({ message: 'Logged out successfully' });

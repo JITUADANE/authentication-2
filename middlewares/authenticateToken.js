@@ -1,12 +1,20 @@
 const jwt = require('jsonwebtoken');
 
-module.exports = (req, res, next) => {
+const authenticateToken = (req, res, next) => {
     const token = req.cookies.token;
-    if (!token) return res.status(401).json({ message: 'Authentication required' });
+    if (!token) {
+        // Redirect to login page if no token found
+        return res.redirect('/login'); 
+    }
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ message: 'Invalid token' });
-        req.user = user;
+        if (err) {
+            // Redirect to login page if token is invalid
+            return res.redirect('/login');
+        }
+        req.user = user; // Attach user data from token to the request
         next();
     });
 };
+
+module.exports = { authenticateToken };
