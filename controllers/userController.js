@@ -2,7 +2,7 @@ const User = require('../models/user');
 
 const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find(); // find from mdb
+        const users = await User.find(); 
         res.send(users);
     } catch (err) {
         res.status(500).send(err.message);
@@ -30,7 +30,7 @@ const createNewUser =  async (req, res) => {
             role: req.body.role || 'Attendee',
         });
 
-        // to save on our db
+        
         await user.save();
         res.status(201).send(user);
     } catch (err) {
@@ -47,7 +47,7 @@ const updateUserByID =  async (req, res) => {
         user.email = req.body.email || user.email;
         user.userName = req.body.email || user.userName;
         user.role = req.body.role || user.role;
-        await user.save(); // until save wait
+        await user.save();
 
         res.send(user);
     } catch (err) {

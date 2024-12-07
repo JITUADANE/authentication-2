@@ -1,4 +1,4 @@
-const Event = require('../models/Event'); 
+const Event = require('../models/eventModel'); 
 const User = require('../models/user')
 
 // CREATE an event

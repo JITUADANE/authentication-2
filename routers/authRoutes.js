@@ -9,4 +9,5 @@ router.post('/register', (req, res) => {
     res.send('Register route');
 });
 
+
 module.exports = router; // Ensure router is exported

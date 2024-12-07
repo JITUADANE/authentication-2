@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><%= event.name %></title>
+</head>
+<body>
+    <header>
+        <h1>Upcoming Events</h1>
+    </header>
+    <main>
+        <% if (events && events.length > 0) { %>
+            <div class="events-container">
+                <% events.forEach(event => { %>
+                    <div class="event-card">
+                        <h2><%= event.name %></h2>
+                        <p><%= event.description %></p>
+                        <p>Date: <%= new Date(event.date).toLocaleDateString() %></p>
+                        <button onclick="window.location.href='/events/<%= event._id %>'">View Details</button>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <p>No events available at the moment.</p>
+        <% } %>
+    </main>
+    <footer>
+        <p>Powered by Event Management System</p>
+    </footer>
+    <main>
+        <h1><%= event.name %></h1>
+        <p><%= event.description %></p>
+        <p>Date: <%= event.date %></p>
+
+        <!-- Ticket Purchase Section -->
+        <h3>Buy Tickets</h3>
+        <form action="/api/tickets/purchase" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- CSRF Token -->
+            <input type="hidden" name="eventId" value="<%= event._id %>">
+            <select name="ticketType">
+                <option value="General">General - $50</option>
+                <option value="VIP">VIP - $100</option>
+            </select>
+            <button type="submit">Purchase</button>
+        </form>
+
+        <!-- Feedback Section -->
+        <h3>Feedback</h3>
+        <% if (event.feedback && event.feedback.length > 0) { %>
+            <% event.feedback.forEach(feedback => { %>
+                <div class="feedback">
+                    <p><strong>User:</strong> <%= feedback.user.username %></p>
+                    <p><strong>Rating:</strong> <%= feedback.rating %> / 5</p>
+                    <p><%= feedback.comment %></p>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No feedback available yet.</p>
+        <% } %>
+
+        <!-- Leave Feedback -->
+        <h3>Leave Feedback</h3>
+        <form action="/events/<%= event._id %>/feedback" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- CSRF Token -->
+            <input type="hidden" name="userId" value="<%= user._id %>">
+            <input type="number" name="rating" min="1" max="5" placeholder="Rating (1-5)">
+            <textarea name="comment" placeholder="Your feedback"></textarea>
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </main>
+</body>
+</html>

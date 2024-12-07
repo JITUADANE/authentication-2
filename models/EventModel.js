@@ -1,7 +1,16 @@
 const Joi = require('joi');
 const mongoose= require('mongoose');
 const Schema =mongoose.Schema;
+//// feedbacks 
 
+const feedbackSchema = new mongoose.Schema({
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    rating: { type: Number, min: 1, max: 5, required: true },
+    comment: { type: String, required: true }
+});
+
+
+///// feed backs 
 const eventSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -42,7 +51,7 @@ const eventSchema = new mongoose.Schema({
         },
         soldTickets: {
             type: Number,
-            default: 0, // Default to 0 if no tickets have been sold yet
+            default: 0, 
         }
     }, 
     rsvpList: [{
@@ -54,20 +63,7 @@ const eventSchema = new mongoose.Schema({
     timestamps: true, // Automatically add createdAt and updatedAt fields
 });
 
-// Validation schema
-// const eventSchemaValidation = Joi.object({
-//     title: Joi.string().required().trim(),
-//     description: Joi.string().required().trim(),
-//     date: Joi.date().required(),
-//     time: Joi.string().required().trim(),
-//     location: Joi.string().required().trim(),
-//     organizerId: Joi.string().required(),
-//     ticketDetails: Joi.object({
-//       price: Joi.number().required(),
-//       availableTickets: Joi.number().required(),
-//       soldTickets: Joi.number().default(0),
-//     }).required(),
-//   });
+
   
 
 module.exports = mongoose.model('Event', eventSchema);

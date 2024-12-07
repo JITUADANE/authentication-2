@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Your Tickets</title>
+</head>
+<body>
+    <h1>Your Tickets</h1>
+    <% tickets.forEach(ticket => { %>
+    <div class="ticket">
+        <h3>Event: <%= ticket.event.name %></h3>
+        <p>Type: <%= ticket.ticketType %></p>
+        <p>Price: $<%= ticket.price %></p>
+        <p>Status: <%= ticket.status %></p>
+    </div>
+    <% }); %>
+</body>
+</html>
